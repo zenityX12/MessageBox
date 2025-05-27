@@ -1,0 +1,29 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Message to Google Sheet</title>
+</head>
+<body>
+  <h2>ฝากข้อความไป Google Sheet</h2>
+  <form id="msgForm">
+    <input type="text" id="message" placeholder="พิมพ์ข้อความที่นี่" required>
+    <button type="submit">ส่ง</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('msgForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const message = document.getElementById('message').value;
+      const url = "https://script.google.com/macros/s/AKfycbxeiy3nCn2VlZCUIMAVjzUPI8--AmQfHUhnS5Cq_QBGrfL5vYSy52wlqG-gD_HW4jiPEA/exec"; // <---- เอา URL จาก Apps Script มาใส่
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({ message }),
+        headers: { "Content-Type": "application/json" }
+      });
+      const json = await res.json();
+      document.getElementById('result').innerText = (json.result === "success") ? "ส่งสำเร็จ!" : "ผิดพลาด";
+      document.getElementById('msgForm').reset();
+    });
+  </script>
+</body>
